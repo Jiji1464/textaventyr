@@ -1286,7 +1286,7 @@ namespace textaventyr
             numberOfDoors = 1;
             doorLockStates = new bool[1];
             doorLockStates[0] = false;
-            enemy = new Pierceroftheheavens();
+            enemy = new PiercerOfTheHeavensEncounter();
 
         }
         public override Room Enter(Player player)

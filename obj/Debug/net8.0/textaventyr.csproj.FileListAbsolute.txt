@@ -13,3 +13,18 @@ C:\Users\yngve.schulthes\Desktop\mitt mästerverk\textaventyr\obj\Debug\net8.0\r
 C:\Users\yngve.schulthes\Desktop\mitt mästerverk\textaventyr\obj\Debug\net8.0\textaventyr.pdb
 C:\Users\yngve.schulthes\Desktop\mitt mästerverk\textaventyr\obj\Debug\net8.0\textaventyr.genruntimeconfig.cache
 C:\Users\yngve.schulthes\Desktop\mitt mästerverk\textaventyr\obj\Debug\net8.0\ref\textaventyr.dll
+C:\Users\yngve.schulthes\Desktop\textaventyr\bin\Debug\net8.0\textaventyr.exe
+C:\Users\yngve.schulthes\Desktop\textaventyr\bin\Debug\net8.0\textaventyr.deps.json
+C:\Users\yngve.schulthes\Desktop\textaventyr\bin\Debug\net8.0\textaventyr.runtimeconfig.json
+C:\Users\yngve.schulthes\Desktop\textaventyr\bin\Debug\net8.0\textaventyr.dll
+C:\Users\yngve.schulthes\Desktop\textaventyr\bin\Debug\net8.0\textaventyr.pdb
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.AssemblyInfoInputs.cache
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.AssemblyInfo.cs
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.csproj.CoreCompileInputs.cache
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.sourcelink.json
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.dll
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\refint\textaventyr.dll
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.pdb
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\textaventyr.genruntimeconfig.cache
+C:\Users\yngve.schulthes\Desktop\textaventyr\obj\Debug\net8.0\ref\textaventyr.dll
