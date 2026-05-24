@@ -1061,7 +1061,7 @@ namespace textaventyr
         public Room MakeOpenDoorChoice(Player player, int choice)
         {
             int doorIndex = choice;
-            if(!(player.Inventory.Contains("Brittle key") && (!player.Inventory.Contains("Master key"))))
+            if(!player.Inventory.Contains("Brittle key") && !player.Inventory.Contains("Master key"))
             {
                 (doorLockStates[doorIndex]) = false;
             }
@@ -1093,6 +1093,7 @@ namespace textaventyr
             else if (player.Inventory.Contains("Brittle key"))
             {
                 Console.WriteLine($"You remember having a key that could fit this lock. Use the Brittle key? [Y/N] (You have {player.Inventory.Count(item => item == "Brittle key")} Brittle key/s.");
+                Thread.Sleep(1000);
                 bool hasDecided = false;
                 while(!hasDecided)
                 {
