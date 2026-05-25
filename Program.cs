@@ -10,6 +10,7 @@ namespace textaventyr
     
     internal class Program
     {
+        public static int bossRoomNumber = 10;
         public static int roomNumber = 1;
 
         static void Main(string[] args)
@@ -46,14 +47,14 @@ namespace textaventyr
             Console.Clear();
 
             player1.ShowStats();
-            
+                   
             
             Room currentRoom = new BasicRoom();
             while(player1.Health > 0)
             {
              Console.Clear();
              currentRoom = currentRoom.Enter(player1);
-                if (Program.roomNumber > 20)
+                if (Program.roomNumber > Program.bossRoomNumber)
                 {
                     Console.Clear();
                     Console.WriteLine("You exit the room only to be met by fresh air and a view of the outside world");
@@ -897,7 +898,7 @@ namespace textaventyr
         public Room()
         {
             int totalDoors;
-            totalDoors = randomizer.Next(0, 4);
+            totalDoors = randomizer.Next(1, 4);
             numberOfDoors = totalDoors;
             doorLockStates = new bool[numberOfDoors];
             for (int i = 0; i < numberOfDoors; i++)
@@ -1138,7 +1139,11 @@ namespace textaventyr
         public Enemy CreateEnemy()
         {
             int roll = randomizer.Next(1, 101);
-            if(roll <= 50)
+            if(Program.roomNumber >= Program.bossRoomNumber)
+            {
+                return new PiercerOfTheHeavensEncounter();
+            }
+            else if(roll <= 50)
             {
                 return new Imp();
 
@@ -1159,7 +1164,7 @@ namespace textaventyr
         }
         public Room CreateRoom()
         {
-            if(Program.roomNumber >= 20)
+            if(Program.roomNumber >= Program.bossRoomNumber)
             {
                 return new BossRoom();
             }
@@ -1199,7 +1204,7 @@ namespace textaventyr
         {
             description = "You enter a long hallway with a single door at the end";
             numberOfDoors = 1;
-            doorLockStates = new bool[1];
+            doorLockStates = new bool[numberOfDoors];
             doorLockStates[0] = (randomizer.Next(0, 2) == 1);
             hasEnemy = false;
             hasTreasure = false;
@@ -1271,7 +1276,8 @@ namespace textaventyr
         {
             description = "The rooms seems to be completely barren";
 
-
+            numberOfDoors = 1;
+            doorLockStates = new bool[numberOfDoors];
             doorLockStates[0] = false;
             hasEnemy = false;
             hasTreasure = false;
@@ -1287,7 +1293,7 @@ namespace textaventyr
             numberOfDoors = 1;
             doorLockStates = new bool[1];
             doorLockStates[0] = false;
-            enemy = new PiercerOfTheHeavensEncounter();
+            
 
         }
         public override Room Enter(Player player)
