@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("textaventyr")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66237449878650118cedd5893c973e8ec83314ad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09b12a5780d8f39458621b3551aab933debe5abe")]
 [assembly: System.Reflection.AssemblyProductAttribute("textaventyr")]
 [assembly: System.Reflection.AssemblyTitleAttribute("textaventyr")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

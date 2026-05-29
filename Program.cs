@@ -286,7 +286,7 @@ namespace textaventyr
                 validChoiceMade = makeGameplayChoice(choiceInput, enemy);
                 Console.WriteLine("");
             }
-            Console.Clear();
+            
         }
         public bool makeGameplayChoice(string choice, Enemy enemy)
         {
@@ -304,10 +304,12 @@ namespace textaventyr
                     }
                     return true;
                 case "c":
+                    Console.Clear();
                     Console.WriteLine("You attempt to dodge!");
                     TryDodge();
                     return true;
                 case "v":
+                    Console.Clear();
                     OpenInventory();
                     bool playerHasChosen = false;
                     while (!playerHasChosen)
@@ -316,11 +318,13 @@ namespace textaventyr
                         string input = (Console.ReadLine())?.ToLower();
                         if (input == "y")
                         {
+                            Console.Clear();
                             UseInventoryInCombat(enemy);
                             playerHasChosen = true;
                         }
                         else if (input == "n")
                         {
+                            
                             Console.WriteLine("You chose not to use an item.");
                             playerHasChosen = true;
                         }
@@ -331,9 +335,11 @@ namespace textaventyr
                     }
                     return true;
                 case "b":
+                    Console.Clear();
                     Focus();
                     return true;
                 default:
+                    
                     Console.WriteLine("Invalid input, try again.");
                     return false;
             }
