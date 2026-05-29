@@ -977,6 +977,8 @@ namespace textaventyr
                     {
                         Console.WriteLine(enemy.killMessage);
                         Console.WriteLine($"You died.\nGAME OVER!");
+                        Console.WriteLine("Press any button to close the application.");
+                        Console.ReadKey();
                         Environment.Exit(0);
                     }
                     player.StartTurn(enemy);
