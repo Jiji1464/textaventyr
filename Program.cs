@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace textaventyr
             Console.WriteLine("Welcome to \"THE WIZARD'S TOWER\", the best game EVER made!");
             Console.WriteLine("Note: The game has some bugs in its current state. If you see lines repeating, do not worry. It still works.");
             Console.WriteLine("In its current state, the game has 20 rooms.");
-            Player player1 = null;           
+            Player player1 = null;
             while (player1 == null)
             {
                 Console.WriteLine($"In order to begin playing, please select your class:\n[1] Warrior (Has lots of HP, but less mana)\n[2] Knight (THE all rounder)\n[3] Mage (has lots of mana, but less HP)");
@@ -44,12 +45,12 @@ namespace textaventyr
             Console.Write($"   Done");
             Thread.Sleep(1000);
             Console.Clear();
-            player1.ShowStats();            
+            player1.ShowStats();
             Room currentRoom = new BasicRoom();
-            while(player1.Health > 0)
+            while (player1.Health > 0)
             {
-             Console.Clear();
-             currentRoom = currentRoom.Enter(player1);
+                Console.Clear();
+                currentRoom = currentRoom.Enter(player1);
                 if (Program.roomNumber > Program.bossRoomNumber)
                 {
                     Console.Clear();
@@ -59,9 +60,9 @@ namespace textaventyr
                     Thread.Sleep(2000);
                     Console.WriteLine("");
                     Console.Write(".");
-                    Thread.Sleep(1000);                   
+                    Thread.Sleep(1000);
                     Console.Write(".");
-                    Thread.Sleep(1000);                   
+                    Thread.Sleep(1000);
                     Console.Write(".");
                     Thread.Sleep(1000);
                     Console.WriteLine("Seems like there's a portal where the body fell");
@@ -87,38 +88,38 @@ namespace textaventyr
                     Console.WriteLine("                     YOU WIN!");
                     Console.WriteLine("");
                     Console.WriteLine("================================================");
-                    Console.WriteLine($"Credits: \n Programming: Yngve Schulthes \n Idea: Yngve Schulthes \n Everything else: Yngve Schulthes");
+                    Console.WriteLine($"Credits: \n Programming: Yngve Schulthes \n Idea: Yngve Schulthes \n Everything else: Yngve Schulthes\n\n Special thanks:\n  You (for playing the game <3)");
                     Console.WriteLine("Press any key to close the program");
                     Console.ReadLine();
                     Environment.Exit(0);
                 }
-            }            
+            }
         }
         public static Player ChooseClass(int choice)
         {
-            switch(choice)
+            switch (choice)
             {
                 case 1:
                     Console.WriteLine("You have chosen to be a Warrior.");
-                    return new Warrior();                    
+                    return new Warrior();
                 case 2:
                     Console.WriteLine("You have chosen to be a Knight.");
-                   return new Knight();                    
+                    return new Knight();
                 case 3:
                     Console.WriteLine("You have chosen to be a Mage.");
-                    return new Mage();                    
+                    return new Mage();
                 default:
                     Console.WriteLine("You either fat fingered a button or.... uhhhhhhh i don't even know [Invalid input]");
                     return null;
-            }                
+            }
         }
     }
     interface IHealthManager
     {
         void ResetHealth();
         void FullHeal();
-        void GetAttacked(int amount);    
-    } 
+        void GetAttacked(int amount);
+    }
     class Player : IHealthManager
     {
         public Player()
@@ -128,8 +129,8 @@ namespace textaventyr
             maxMana = 10;
             mana = 5;
             className = "Basic";
-            fireBallDmg = 6;
-            basicAttackDmg = 4;
+            castSpellMultiplier = 2;
+            meeleeAttackMultiplier = 2;
         }
         public List<string> Inventory { get; set; } = new List<string>();
         private string name = "Unknown";
@@ -138,11 +139,11 @@ namespace textaventyr
             get { return name; }
             set
             {
-                if(string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     value = "Unknown";
                 }
-                name = value;              
+                name = value;
             }
         }
         public int maxHealth;
@@ -151,8 +152,8 @@ namespace textaventyr
         private int mana;
         public int potentialManaGainedUponRoundStart = 5;
         public string className;
-        public int fireBallDmg;
-        public int basicAttackDmg;
+        public int castSpellMultiplier;
+        public int meeleeAttackMultiplier;
         bool hasChosenToDodge = false;
         bool hasDodgedLastTurn = false;
         bool isDodgingThisTurn = false;
@@ -161,14 +162,14 @@ namespace textaventyr
         public int Health
         {
             get { return health; }
-            set 
+            set
             {
                 if (value < 0)
                 { value = 0; }
-                else if(value > maxHealth)
+                else if (value > maxHealth)
                 { value = maxHealth; }
                 health = value;
-            }         
+            }
         }
         public int Mana
         {
@@ -182,7 +183,7 @@ namespace textaventyr
                 else if (value > maxMana) { value = maxMana; }
                 mana = value;
             }
-        }      
+        }
         public void ResetHealth()
         {
             maxHealth = 10;
@@ -199,7 +200,7 @@ namespace textaventyr
         public void GetAttacked(int amount)
         {
             int potentialDamageTaken = amount;
-            if(isDodgingThisTurn == true)
+            if (isDodgingThisTurn == true)
             {
                 potentialDamageTaken = 0;
                 hasDodgedLastTurn = true;
@@ -213,19 +214,19 @@ namespace textaventyr
         public void TakeDamage(int amount)
         {
             Health -= amount;
-            if(amount == 0)
+            if (amount == 0)
             {
                 Console.WriteLine($"You successfully dodged the incoming attack!\n");
             }
             else
             {
                 Console.WriteLine($"You took damage!\nDamage taken: {amount}!\n");
-            }           
+            }
         }
         public void Heal(int amount)
         {
             Health += amount;
-            Console.WriteLine($"You've healed {amount} points of health!\n");            
+            Console.WriteLine($"You've healed {amount} points of health!\n");
         }
         public void LoseMana(int amount)
         {
@@ -234,12 +235,12 @@ namespace textaventyr
             if (Mana == 0)
             {
                 Console.WriteLine($"Your mana is depleted!\n");
-            }           
+            }
         }
         public void GainMana(int amount)
         {
             Mana += amount;
-            Console.WriteLine($"You've gained {amount} mana points!\n");           
+            Console.WriteLine($"You've gained {amount} mana points!\n");
         }
         //dodging
         public void UpdateDodge()
@@ -254,7 +255,7 @@ namespace textaventyr
             dodgeChance = 35;
         }
         public void DoDodgeCalculation()
-        {            
+        {
             int dodgingRollResult = randomizer.Next(1, (101));
             if (dodgingRollResult <= dodgeChance)
             {
@@ -273,30 +274,31 @@ namespace textaventyr
         public void StartTurn(Enemy enemy) // Note to self: I have to pass in the name of an enemy.
         {
             isDodgingThisTurn = false;
-            GainMana(randomizer.Next((potentialManaGainedUponRoundStart-4), potentialManaGainedUponRoundStart));
+            GainMana(randomizer.Next((potentialManaGainedUponRoundStart - 4), potentialManaGainedUponRoundStart));
             ShowStats();
-            
-            Console.WriteLine("");            
+
+            Console.WriteLine("");
             bool validChoiceMade = false;
-            while(!validChoiceMade)
+            while (!validChoiceMade)
             {
-                Console.WriteLine($"It is your turn to act. What will you do?\nPress [X] to fight,\nPress [C] to attempt to dodge.\nPress [V] to look through your inventory and potentially use items (if you do not use an item, your turn will be skipped).");
+                Console.WriteLine($"It is your turn to act. What will you do?\nPress [X] to fight,\nPress [C] to attempt to dodge.\nPress [V] to look through your inventory and potentially use items (if you do not use an item, your turn will be skipped).\nPress [B] to focus and gain {potentialManaGainedUponRoundStart * 1} mana.");
                 string? choiceInput = (Console.ReadLine()?.ToLower());
                 validChoiceMade = makeGameplayChoice(choiceInput, enemy);
                 Console.WriteLine("");
             }
-        }        
+            Console.Clear();
+        }
         public bool makeGameplayChoice(string choice, Enemy enemy)
         {
-            switch(choice)
+            switch (choice)
             {
                 case "x":
                     bool validAttackChoiceMade = false;
                     Console.Clear();
-                    Console.WriteLine("You chose to attack.");                    
-                    while(!validAttackChoiceMade)
+                    Console.WriteLine("You chose to attack.");
+                    while (!validAttackChoiceMade)
                     {
-                        Console.WriteLine($"Choose your attack.\nEnter [1] to attempt to hit the enemy\nEnter [2] to cast fireball. [MANA COST: 7]{(Mana < 7 ? " [NOT ENOUGH MANA]" : "")}");
+                        Console.WriteLine($"Choose your attack.\nEnter [1] to attempt to hit the enemy\nEnter [2] to slash the opponent using a sharp object. [Requires throwing knife in inventory] {((!Inventory.Contains("Throwing knife")) ? "[NOT AVAILABLE]" : "")} \nEnter [3] to cast fireball. [MANA COST: 7]{(Mana < 7 ? " [NOT ENOUGH MANA]" : "")} \nEnter [4] to cast explosion. [MANA COST: 14]{(Mana < 14 ? " [NOT ENOUGH MANA]" : "")}");
                         int.TryParse(Console.ReadLine(), out int choiceInput);
                         validAttackChoiceMade = makeAttackChoice(choiceInput, enemy);
                     }
@@ -306,18 +308,18 @@ namespace textaventyr
                     TryDodge();
                     return true;
                 case "v":
-                    OpenInventory();                    
+                    OpenInventory();
                     bool playerHasChosen = false;
-                    while(!playerHasChosen)
+                    while (!playerHasChosen)
                     {
                         Console.WriteLine("Would you like to use an item? [Y/N]");
                         string input = (Console.ReadLine())?.ToLower();
-                        if(input == "y")
+                        if (input == "y")
                         {
                             UseInventoryInCombat(enemy);
                             playerHasChosen = true;
                         }
-                        else if(input == "n")
+                        else if (input == "n")
                         {
                             Console.WriteLine("You chose not to use an item.");
                             playerHasChosen = true;
@@ -325,8 +327,11 @@ namespace textaventyr
                         else
                         {
                             Console.WriteLine("You couldn't decide whether to use an item or not, so you thought about it again. [Invalid input]");
-                        }                       
+                        }
                     }
+                    return true;
+                case "b":
+                    Focus();
                     return true;
                 default:
                     Console.WriteLine("Invalid input, try again.");
@@ -337,12 +342,12 @@ namespace textaventyr
         {
             Console.WriteLine("INVENTORY");
             Console.WriteLine("Contents:");
-            if(Inventory.Contains("Throwing knife"))
+            if (Inventory.Contains("Throwing knife"))
             {
                 Console.WriteLine($"Throwing knife X{Inventory.Count(item => item == "Throwing knife")}");
                 Console.WriteLine("  Throwable. Deals 10 damage. [Usable in combat] [One time use]");
             }
-            if(Inventory.Contains("Mana potion"))
+            if (Inventory.Contains("Mana potion"))
             {
                 Console.WriteLine($"Mana potion X{Inventory.Count(item => item == "Mana potion")}");
                 Console.WriteLine("  Restores 10 Mana upon use. [Usable in combat] [One time use]");
@@ -366,43 +371,43 @@ namespace textaventyr
         }
         public void UseInventoryInCombat(Enemy enemy)
         {
-            if(Inventory.Count == 0)
+            if (Inventory.Count == 0)
             {
                 Console.WriteLine("Your inventory is empty...");
                 Console.WriteLine("");
                 return;
-            }            
+            }
             bool chosenItemToUSe = false;
-            while(!chosenItemToUSe)
-            {               
+            while (!chosenItemToUSe)
+            {
                 Console.WriteLine("Which item would you like to use?");
                 if (Inventory.Contains("Throwing knife"))
                 {
-                  
+
                     Console.WriteLine($"[1] Use Throwing knife");
                 }
                 if (Inventory.Contains("Mana potion"))
                 {
-                   
+
                     Console.WriteLine($"[2] Use Mana potion");
                 }
                 if (Inventory.Contains("Health potion"))
                 {
-                   
+
                     Console.WriteLine($"[3] Use Health potion");
                 }
                 Console.WriteLine("");
 
                 int.TryParse(Console.ReadLine(), out int useItemInput);
                 chosenItemToUSe = makeUseItemInCombatChoice(useItemInput, enemy);
-            }           
+            }
         }
         public bool makeUseItemInCombatChoice(int choice, Enemy enemy)
         {
-            switch(choice)
+            switch (choice)
             {
                 case 1:
-                    if(Inventory.Contains("Throwing knife"))
+                    if (Inventory.Contains("Throwing knife"))
                     {
                         Console.WriteLine($"You throw the knife at {enemy.name}");
                         Inventory.Remove("Throwing knife");
@@ -412,7 +417,7 @@ namespace textaventyr
                     Console.WriteLine("You either hallucinated a Throwing knife in your inventory or fat fingered a button. [Invalid input]");
                     return false;
                 case 2:
-                    if(Inventory.Contains("Mana potion"))
+                    if (Inventory.Contains("Mana potion"))
                     {
                         Console.WriteLine("You hastily drink the potion.");
                         Inventory.Remove("Mana potion");
@@ -438,12 +443,25 @@ namespace textaventyr
         }
         public bool makeAttackChoice(int choice, Enemy enemy)
         {
-            switch(choice)
+            switch (choice)
             {
-                case 1:                    
-                    BasicAttack(enemy);
+                case 1:
+                    PunchAttack(enemy);
                     return true;
                 case 2:
+                    if(Inventory.Contains("Throwing knife"))
+                    {
+                        KnifeAttack(enemy);
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You either fat fingered a button or tried to slash with a knife you did not have.. [Invalid Input]");
+                        return false;
+                    }
+
+
+                case 3:
                     if (Mana >= 7)
                     {
                         Mana -= 7;
@@ -451,22 +469,53 @@ namespace textaventyr
                         return true;
                     }
                     else
-                    Console.WriteLine("You do not have enough mana to do that!");
-                    return false;                    
+                        Console.WriteLine("You do not have enough mana to do that!");
+                    return false;
+                case 4:
+                    if (Mana >= 14)
+                    {
+                        Mana -= 14;
+                        CastExplosion(enemy);
+                        return true;
+                    }
+                    else
+                        Console.WriteLine("You do not have enough mana to do that!");
+                    return false;
                 default:
                     Console.WriteLine("Invalid input. Try again.");
                     return false;
             }
         }
-        public void BasicAttack(Enemy enemy)
+        public void PunchAttack(Enemy enemy)
         {
-            int damage = basicAttackDmg;
+            int damage = 2 * meeleeAttackMultiplier;
             enemy.GetAttacked(damage);
         }
+
+        public void KnifeAttack(Enemy enemy)
+        {
+            int damage = 3 * meeleeAttackMultiplier;
+            enemy.GetAttacked(damage);
+        }
+        
+
         public void CastFireBall(Enemy enemy)
         {
-            int damage = fireBallDmg;
+            int damage = 3 * castSpellMultiplier;
             enemy.GetAttacked(damage);
+        }
+
+        public void CastExplosion(Enemy enemy)
+        {
+            int damage = 5 * castSpellMultiplier;
+            enemy.GetAttacked(damage);
+        }
+       
+        
+        
+        public void Focus()
+        {
+            GainMana(potentialManaGainedUponRoundStart);
         }
     }
     class Warrior : Player
@@ -549,17 +598,17 @@ namespace textaventyr
             Health -= amount;
             if (amount == 0)
             {
-                Console.WriteLine($"The enemy dodged your attack.\n");
+                Console.WriteLine($"The enemy dodged your attack.");
             }
             else
             {
-                Console.WriteLine($"You dealt {amount} damage to the enemy!\n");
+                Console.WriteLine($"You dealt {amount} damage to the enemy!");
             }
         }
         public void Heal(int amount)
         {
             Health += amount;
-            Console.WriteLine($"The enemy has healed {amount} points of health!\n");            
+            Console.WriteLine($"The enemy has healed {amount} points of health!");            
         }
         public void GetAttacked(int amount)
         {            
@@ -686,7 +735,7 @@ namespace textaventyr
             attackPool.Add(Punishment);
             attackPool.Add(Reduction);
             killMessage = "You are eviscerated in an instant.";
-            introMessage = "$The room is swallowed by flames of hatred.\nTHE HOLY ONE descends upon you.";
+            introMessage = "The room is swallowed by flames.\nTHE HOLY ONE descends upon you.";
         }
         public void Smite(Player player)
         {
@@ -743,7 +792,7 @@ namespace textaventyr
         public Imp()
         {
             name = "Imp";
-            maxHealth = 2;
+            maxHealth = 7;
             Health = maxHealth;
             attackPool.Clear();
             attackPool.Add(Slash);            
@@ -763,7 +812,7 @@ namespace textaventyr
         public Skeleton()
         {
             name = "Skeleton";
-            maxHealth = 7;
+            maxHealth = 11;
             Health = maxHealth;
             killMessage = "The skeleton grabs a rock and bashes your head into a pulp";
             introMessage = "A skeleton rises from the darkness";
@@ -774,7 +823,7 @@ namespace textaventyr
         public LivingCorpse()
         {
             name = "Living corpse";
-            maxHealth = 10;
+            maxHealth = 15;
             Health = maxHealth;
             killMessage = "After knocking you unconscious, the living corpse starts gnawing at your bones";
             introMessage = "Suddenly, a corpse rises from the floor";
@@ -786,6 +835,66 @@ namespace textaventyr
             Console.WriteLine($"{name} performed {attackName}!");
             int damage = 6;
             player.GetAttacked(damage);
+        }
+    }
+    class BigImp : Enemy
+    {
+        public BigImp()
+        {
+            name = "Grand imp";
+            maxHealth = 20;
+            Health = maxHealth;
+            killMessage = ("The grand imp grabs you by the legs and slams you against the floor, reducing your head to a splatter");
+            introMessage = ("An unexpectedly large imp charges at you");
+            attackPool.Clear();
+            attackPool.Add(Punch);
+            attackPool.Add(Stomp);
+        }
+        public void Punch(Player player)
+        {
+            string attackName = "Punch";
+            Console.WriteLine($"{name} performed {attackName}!");
+            int damage = 7;
+            player.GetAttacked(damage);
+        }
+        public void Stomp(Player player)
+        {
+            string attackName = "Stomp";
+            Console.WriteLine($"{name} performed {attackName}!");
+            int damage = 6;
+            player.GetAttacked(damage);
+        }
+    }
+    class ImpSorcerer : Enemy
+    {
+        public ImpSorcerer()
+        {
+            name = "Imp sorcerer";
+            maxHealth = 15;
+            Health = maxHealth;
+            killMessage = ("The imp sorcerer overwhelms you with dark, twisted magic");
+            introMessage = ("An im wielding a wand is waiting for you");
+            attackPool.Clear();
+            attackPool.Add(MimicFireCast);
+            attackPool.Add(MimicExploCast);
+            attackPool.Add(Drain);
+        }
+        public void MimicFireCast(Player player)
+        {
+            Console.WriteLine($"{name} mimicks your Fireball spell!");
+
+            player.GetAttacked(player.castSpellMultiplier * 3);
+        }
+        public void MimicExploCast(Player player)
+        {
+            Console.WriteLine($"{name} mimicks your Explosion spell!");
+
+            player.GetAttacked(player.castSpellMultiplier * 5);
+        }
+        public void Drain(Player player)
+        {
+            Console.WriteLine($"{name} attempts to drain your mana using their dark magic!");
+            player.LoseMana(5);
         }
     }
     class Room
@@ -817,7 +926,7 @@ namespace textaventyr
             {
                 doorLockStates[i] = randomizer.Next(0, 2) == 1;
             }
-            hasEnemy = randomizer.Next(0, 2) == 1;
+            hasEnemy = randomizer.Next(0, 3) != 1;
             hasTreasure = randomizer.Next(0, 2) == 1;
             if (hasTreasure)
             {
@@ -1022,7 +1131,7 @@ namespace textaventyr
         }
         public Enemy CreateEnemy()
         {
-            int roll = randomizer.Next(1, 101);
+            int roll = randomizer.Next(1, 131);
             if(Program.roomNumber >= Program.bossRoomNumber)
             {
                 return new PiercerOfTheHeavensEncounter();
@@ -1039,6 +1148,14 @@ namespace textaventyr
             else if(roll <= 99)
             {
                 return new LivingCorpse();
+            }
+            else if(roll <= 109)
+            {
+                return new ImpSorcerer();
+            }
+            else if(roll <= 129)
+            {
+                return new BigImp();
             }
             else
             {
@@ -1060,11 +1177,11 @@ namespace textaventyr
             {
                 return new HallWay();
             }
-            else if(roll <= 74)
+            else if(roll <= 80)
             {
                 return new BarrenRoom();
             }
-            else if(roll <= 83)
+            else if(roll <= 87)
             {
                 return new DmgRoom();
             }
@@ -1124,19 +1241,21 @@ namespace textaventyr
     {
         public DmgRoom() : base()
         {
-            description = "Seems like a normal room, but something feels off.. [You feel one of your attacks getting stronger!]";
+            description = "Seems like a normal room, but something feels off.. [You feel one of your attack types getting stronger!..";
             hasEnemy = false;
         }
         public override Room Enter(Player player)
         {
-            bool fireAttackUpgrade = (randomizer.Next(0, 2) == 1);
-            if(fireAttackUpgrade)
+            int fireAttackUpgrade = (randomizer.Next(0, 2));
+            if(fireAttackUpgrade == 1)
             {
-                player.fireBallDmg += 5;
+                Console.Write(" your maana based attacks!]");
+                player.castSpellMultiplier += 1;
             }
             else
             {
-                player.basicAttackDmg += 5;
+                Console.Write(" your meelee attacks!]");
+                player.meeleeAttackMultiplier += 1;
             }
             return base.Enter(player);
         }
