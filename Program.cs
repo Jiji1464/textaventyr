@@ -149,6 +149,7 @@ namespace textaventyr
         private int health;
         public int maxMana;
         private int mana;
+        public int potentialManaGainedUponRoundStart = 5;
         public string className;
         public int fireBallDmg;
         public int basicAttackDmg;
@@ -193,7 +194,7 @@ namespace textaventyr
         }
         public void ShowStats()
         {
-            Console.WriteLine($"======================\nPLAYER STATE\n\nCLASS: {className}\nNAME: {name}\nHEALTH: {Health}/{maxHealth}\nMANA: {Mana}/{maxMana}\n======================\n");
+            Console.WriteLine($"======================\nPLAYER STATE\n\nCLASS: {className}\nNAME: {name}\nHEALTH: {Health}/{maxHealth}\nMANA: {Mana}/{maxMana}\n======================");
         }
         public void GetAttacked(int amount)
         {
@@ -272,7 +273,9 @@ namespace textaventyr
         public void StartTurn(Enemy enemy) // Note to self: I have to pass in the name of an enemy.
         {
             isDodgingThisTurn = false;
-            GainMana(randomizer.Next(1, 5));
+            GainMana(randomizer.Next((potentialManaGainedUponRoundStart-4), potentialManaGainedUponRoundStart));
+            ShowStats();
+            
             Console.WriteLine("");            
             bool validChoiceMade = false;
             while(!validChoiceMade)
@@ -571,7 +574,7 @@ namespace textaventyr
         }
         public void ShowStats()
         {
-            Console.WriteLine($"======================\nENEMY STATE\n\nTYPE: {name}\nHEALTH: {Health}/{maxHealth}\n======================\n");
+            Console.WriteLine($"======================\nENEMY STATE\n\nTYPE: {name}\nHEALTH: {Health}/{maxHealth}\n======================");
         }
         public void UpdateDodge(bool successfullyDodgedLastTime)
         {
@@ -849,8 +852,9 @@ namespace textaventyr
             if (enemy != null)
             {
                 Console.WriteLine("There's an enemy in the room. Prepare to fight!");
+                Console.WriteLine(enemy.introMessage);
                 enemy.ShowStats();
-                player.ShowStats();
+
                 Console.WriteLine("");
                 while(true)
                 {
@@ -866,11 +870,12 @@ namespace textaventyr
                         Console.WriteLine($"You died.\nGAME OVER!");
                         Environment.Exit(0);
                     }
-                    player.StartTurn(enemy);                    
-                    enemy.ShowStats();                    
+                    player.StartTurn(enemy);
+                       
                     if(enemy.Health < 1) { continue; }
                     enemy.StartTurn(player);
-                    player.ShowStats();                    
+                    enemy.ShowStats();
+
                 }
             }
             Room nextRoom = null;
@@ -1090,12 +1095,14 @@ namespace textaventyr
     {
         public ManaRoom() : base()
         {
-            description = "Seems like a normal room, but something feels off.. [You feel your max mana increase by 5!]";           
+            description = $"Seems like a normal room, but something feels off.. You feel your mana potential rising... \n[You gained 5 max mana]\n[Yoir mana was replenished]\n[Your mana gain was increased]";
             hasEnemy = false;            
         }
         public override Room Enter(Player player)
         {
             player.maxMana += 5;
+            player.Mana = player.maxMana;
+            player.potentialManaGainedUponRoundStart += 2;
             return base.Enter(player);
         }
     }
@@ -1103,12 +1110,13 @@ namespace textaventyr
     {
         public HealthRoom() : base()
         {
-            description = "Seems like a normal room, but something feels off.. [You feel your max health increase by 5!]";            
+            description = $"Seems like a normal room, but something feels off.. You feel more lively...\n[Your max health has increased by 5!]\n[Your health has increased by 5!]";            
             hasEnemy = false;
         }
         public override Room Enter(Player player)
         {
             player.maxHealth += 5;
+            player.FullHeal();
             return base.Enter(player);
         }
     }
